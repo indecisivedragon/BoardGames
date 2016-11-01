@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Surface;
@@ -35,8 +36,11 @@ public class LevelScreenFragment extends Fragment {
     private int rotation;
 
     private GameView gameView;
+    private String gameType;
 
     private OnFragmentInteractionListener mListener;
+
+    private String DEBUG_TAG = "level screen fragment";
 
     public LevelScreenFragment() {
         // Required empty public constructor
@@ -51,12 +55,13 @@ public class LevelScreenFragment extends Fragment {
      * @param rotation the screen orientation
      * @return A new instance of fragment LevelScreenFragment.
      */
-    public static LevelScreenFragment newInstance(int height, int width, int rotation) {
+    public static LevelScreenFragment newInstance(int height, int width, int rotation, String gameType) {
         LevelScreenFragment fragment = new LevelScreenFragment();
         Bundle args = new Bundle();
         args.putInt(SCREEN_HEIGHT, height);
         args.putInt(SCREEN_WIDTH, width);
         args.putInt(SCREEN_ROTATION, rotation);
+        args.putString(StartGameActivity.extra_key_name, gameType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -68,9 +73,10 @@ public class LevelScreenFragment extends Fragment {
             height = getArguments().getInt(SCREEN_HEIGHT);
             width = getArguments().getInt(SCREEN_WIDTH);
             rotation = getArguments().getInt(SCREEN_ROTATION);
+            this.gameType = getArguments().getString(StartGameActivity.extra_key_name);
         }
 
-        System.out.println("level screen fragment created");
+        Log.d(DEBUG_TAG, "level screen fragment created as " + gameType);
 
         mListener.onFragmentStart();
     }
@@ -78,7 +84,6 @@ public class LevelScreenFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_level_screen, container, false);
 
@@ -98,9 +103,9 @@ public class LevelScreenFragment extends Fragment {
         }
         layout.setLayoutParams(params);
 
-        System.out.println("level screen fragment input: height " + params.height + ", width " + params.width + ", rotation " + rotation);
+        Log.d(DEBUG_TAG, "input: height " + params.height + ", width " + params.width + ", rotation " + rotation);
 
-        gameView = new GameView(this.getContext());
+        gameView = new GameView(this.getContext(), gameType);
         gameView.setBackgroundColor(Color.GRAY);
         layout.addView(gameView);
 

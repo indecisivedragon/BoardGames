@@ -25,7 +25,7 @@ import lili.boardgames.R;
  * create an instance of this fragment.
  */
 public class LevelTrackFragment extends Fragment {
-    private String TRACK_DEBUG = "level track fragment";
+    private String DEBUG_TAG = "level track fragment";
 
     //take in height and width of screen
     private static final String HEIGHT = "height";
@@ -35,6 +35,7 @@ public class LevelTrackFragment extends Fragment {
     private int height;
     private int width;
     private int rotation;
+    private String gameType;
 
     //this is the view to be called
     private View view;
@@ -55,12 +56,13 @@ public class LevelTrackFragment extends Fragment {
      * @param width screen width
      * @return A new instance of fragment LevelTrackFragment.
      */
-    public static LevelTrackFragment newInstance(int height, int width, int rotation) {
+    public static LevelTrackFragment newInstance(int height, int width, int rotation, String gameType) {
         LevelTrackFragment fragment = new LevelTrackFragment();
         Bundle args = new Bundle();
         args.putInt(HEIGHT, height);
         args.putInt(WIDTH, width);
         args.putInt(ROTATION, rotation);
+        args.putString(StartGameActivity.extra_key_name, gameType);
         fragment.setArguments(args);
         return fragment;
     }
@@ -72,8 +74,9 @@ public class LevelTrackFragment extends Fragment {
             height = getArguments().getInt(HEIGHT);
             width = getArguments().getInt(WIDTH);
             rotation = getArguments().getInt(ROTATION);
+            this.gameType = getArguments().getString(StartGameActivity.extra_key_name);
         }
-        System.out.println("level track fragment created");
+        Log.d(DEBUG_TAG, "level track fragment created");
 
         mListener.onFragmentStart();
     }
@@ -90,7 +93,7 @@ public class LevelTrackFragment extends Fragment {
         FrameLayout layout = (FrameLayout) view.findViewById(R.id.fragment_level_track_id);
         FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) layout.getLayoutParams();
 
-        System.out.println("level track fragment input: height " + height + ", width " + width + ", rotation " + rotation);
+        Log.d(DEBUG_TAG, "input: height " + height + ", width " + width + ", rotation " + rotation);
 
         if (rotation == Surface.ROTATION_0 || rotation == Surface.ROTATION_180) {
             params.height = height/3;
@@ -143,7 +146,7 @@ public class LevelTrackFragment extends Fragment {
 
     public void setUpdateStatus(String updateStatus) {
         this.updateStatus = updateStatus;
-        Log.d(TRACK_DEBUG, "level track fragment received: " + this.updateStatus);
+        Log.d(DEBUG_TAG, "level track fragment received: " + this.updateStatus);
         setStatusText();
     }
 

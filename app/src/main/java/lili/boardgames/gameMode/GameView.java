@@ -17,6 +17,10 @@ public class GameView extends SurfaceView {
     private String GAME_DEBUG = "game view";
     private int mActivePointerId;
 
+    //defaults to connect four
+    private String gameType = "connectFour";
+
+    //positions
     private int numCircles = 4;
     private float rectangleHeight = 100;
     private float rectangleWidth = 100;
@@ -28,6 +32,7 @@ public class GameView extends SurfaceView {
 
     private Canvas c;
 
+    private Game game;
     private ConnectFour connectFour = new ConnectFour();
     //are we waiting on player input
     private boolean waitForHuman = true;
@@ -36,7 +41,7 @@ public class GameView extends SurfaceView {
 
     private onRefreshListener onRefreshListener;
 
-    GameView(Context context) {
+    GameView(Context context, String gameType) {
         super(context);
         if (context instanceof onRefreshListener) {
             onRefreshListener = (onRefreshListener) context;
@@ -44,6 +49,8 @@ public class GameView extends SurfaceView {
             throw new RuntimeException(context.toString()
                     + " must implement OnRefreshListener");
         }
+        this.gameType = gameType;
+        setupBoard();
     }
 
     public void onDraw(Canvas c) {
@@ -59,6 +66,19 @@ public class GameView extends SurfaceView {
         if (display) {
             setupCircles();
             drawBoard();
+        }
+    }
+
+    private void setupBoard() {
+        switch (gameType) {
+            case "connectFour":
+                game = new ConnectFour();
+                break;
+            case "chess":
+                game = new Chess();
+                break;
+            default:
+                break;
         }
     }
 

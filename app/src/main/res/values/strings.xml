@@ -4,6 +4,7 @@
     <string name="start_game_activity_name">Games</string>
 
     <string name="connect_four_button">Connect Four</string>
+    <string name="chess_button">Chess</string>
 
     <string name="level_screen_intro">Level Screen</string>
 

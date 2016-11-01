@@ -56,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void connectFour(View view) {
         Intent intent = new Intent(this, StartGameActivity.class);
+        intent.putExtra("GAME_TYPE", "connectFour");
+        startActivity(intent);
+    }
+
+    public void chess(View view) {
+        Intent intent = new Intent(this, StartGameActivity.class);
+        intent.putExtra("GAME_TYPE", "chess");
         startActivity(intent);
     }
 }

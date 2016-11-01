@@ -22,9 +22,12 @@ import lili.boardgames.R;
 
 public class StartGameActivity extends AppCompatActivity implements LevelTrackFragment.OnFragmentInteractionListener, LevelScreenFragment.OnFragmentInteractionListener, GameView.onRefreshListener {
 
+    public static final String extra_key_name = "GAME_TYPE";
+
     private String filename = "data_file.txt";
 
     private FragmentManager fragmentManager;
+    private String gametype = null;
 
     private int mActivePointerId;
 
@@ -54,28 +57,33 @@ public class StartGameActivity extends AppCompatActivity implements LevelTrackFr
         int height = size.y;
         int width = size.x;
 
+        Log.d(DEBUG_TAG, "layout: height " + height + ", width " + width);
+
     /*
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.getLayoutParams();
         int height = params.height;
         int width = params.width;
 */
 
-        LevelScreenFragment screen = LevelScreenFragment.newInstance(height, width, rotation);
-        System.out.println("layout: height " + height + ", width " + width);
-        fragmentTransaction.replace(R.id.fragment_level_screen, screen);
+        //check type of game
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            gametype = extras.getString(extra_key_name);
+            Log.d(DEBUG_TAG, "user selected " + gametype);
 
-        LevelTrackFragment trackFragment = LevelTrackFragment.newInstance(height, width, rotation);
-        fragmentTransaction.replace(R.id.fragment_level_track, trackFragment);
+            LevelScreenFragment screen = LevelScreenFragment.newInstance(height, width, rotation, gametype);
+            fragmentTransaction.replace(R.id.fragment_level_screen, screen);
 
-        /*
-        int thing = R.id.fragment_level_screen;
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) layout.findViewById(thing).getLayoutParams();
-        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        layout.findViewById(thing).setLayoutParams(params);
-        */
+            LevelTrackFragment trackFragment = LevelTrackFragment.newInstance(height, width, rotation, gametype);
+            fragmentTransaction.replace(R.id.fragment_level_track, trackFragment);
 
-        fragmentTransaction.commit();
-        getSupportFragmentManager().executePendingTransactions();
+            fragmentTransaction.commit();
+            getSupportFragmentManager().executePendingTransactions();
+        }
+        else {
+            Toast t = Toast.makeText(this.getApplicationContext(), "oops...no game selected", Toast.LENGTH_SHORT);
+            t.show();
+        }
     }
 
     public void writeFile(View view) {
