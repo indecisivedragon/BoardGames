@@ -160,7 +160,7 @@ public class ConnectFour implements Game{
         return -1;
     }
 
-    public int getColor(int circle) {
+    public int getPiece(int circle) {
         return this.getColor(circle/boardSize, circle%boardSize);
     }
 

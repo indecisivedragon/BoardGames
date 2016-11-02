@@ -33,7 +33,7 @@ public class GameView extends SurfaceView {
     private Canvas c;
 
     private Game game;
-    private ConnectFour connectFour = new ConnectFour();
+    //private ConnectFour connectFour = new ConnectFour();
     //are we waiting on player input
     private boolean waitForHuman = true;
     //can we start showing the board
@@ -58,7 +58,7 @@ public class GameView extends SurfaceView {
         this.c = c;
 
         if (startNewGame) {
-            connectFour = new ConnectFour();
+            setupBoard();
             startNewGame = false;
             display = true;
         }
@@ -85,7 +85,7 @@ public class GameView extends SurfaceView {
     public void setBounds(int h, int w) {
         rectangleHeight = (float) h/numCircles;
         rectangleWidth = (float) w/numCircles;
-        //Log.d(GAME_DEBUG, "bounds: " + rectangleHeight + ", " + rectangleWidth);
+        Log.d(GAME_DEBUG, "bounds: " + rectangleHeight + ", " + rectangleWidth);
     }
 
     //set up initial white circles
@@ -114,7 +114,7 @@ public class GameView extends SurfaceView {
     public void drawBoard() {
         for (int i = 0; i < numCircles*numCircles; i++) {
             Paint p = new Paint();
-            p.setColor(connectFour.getColor(i));
+            p.setColor(game.getPiece(i));
             float xCenter = circleCoordinates[i][0];
             float yCenter = circleCoordinates[i][1];
             c.drawOval(xCenter - 25, yCenter - 25, xCenter + 25, yCenter + 25, p);
@@ -155,26 +155,6 @@ public class GameView extends SurfaceView {
         waitForHuman = true;
     }
 
-    /*
-    public void checkDrawFlower(float x, float y) {
-        int circle = coordinatesValid(x, y);
-        //if we can make a move, then proceed
-        if (circle != -1) {
-            proceed(circle);
-            waitForHuman = true;
-        }
-        //otherwise do nothing
-        else {
-            waitForHuman = false;
-        }
-    }
-
-    private void proceed(int circle) {
-        connectFour.makeMove(circle);
-    }
-
-*/
-
     private int coordinatesValid(float x, float y) {
         //return the circle number if valid, or -1 if not
         for (int i = 0; i < numCircles*numCircles; i++) {
@@ -183,7 +163,7 @@ public class GameView extends SurfaceView {
             //make sure we are within a circle
             if (isInRadius(x, y, xCenter, yCenter)) {
                 //make sure it is an empty circle
-                if (connectFour.getBoard()[i/numCircles][i%numCircles] == 0) {
+                if (game.getBoard()[i/numCircles][i%numCircles] == 0) {
                     Log.d(GAME_DEBUG, "coordinates valid at circle " + i);
                     return i;
                 }
@@ -225,11 +205,11 @@ public class GameView extends SurfaceView {
                     //if coordinates are indeed valid, we can proceed, otherwise not
                     int circle = coordinatesValid(x, y);
                     if (circle != -1 && waitForHuman) {
-                        connectFour.makeMove(circle);
+                        game.makeMove(circle);
                         waitForHuman = false;
                     }
                     else if (!waitForHuman) {
-                        connectFour.makeAIMove();
+                        game.makeAIMove();
                         waitForHuman = true;
                     }
 
@@ -254,7 +234,7 @@ public class GameView extends SurfaceView {
     }
 
     public String getGameStatus() {
-        return connectFour.getGameMessage();
+        return game.getGameMessage();
     }
 
     public interface onRefreshListener {

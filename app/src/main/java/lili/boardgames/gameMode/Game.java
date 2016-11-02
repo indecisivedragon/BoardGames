@@ -15,7 +15,15 @@ public interface Game {
     int boardSize = 0;
     int[][] board = new int[0][0];
 
+    //gets the board
     int[][] getBoard();
+    //returns the game piece on circle c
+    int getPiece(int c);
 
-    public String getGameMessage();
+    //human move
+    void makeMove(int c);
+    //AI move
+    void makeAIMove();
+
+    String getGameMessage();
 }

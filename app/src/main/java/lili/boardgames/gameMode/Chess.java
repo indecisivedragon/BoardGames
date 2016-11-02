@@ -123,7 +123,7 @@ public class Chess implements Game {
         return players;
     }
 
-    public int getColor(int i, int j) {
+    public int getPiece(int i, int j) {
         int id = board[i][j];
         for (int k=0; k<players.size(); k++) {
             if (id == players.get(k).getPlayerID()) {
@@ -133,11 +133,12 @@ public class Chess implements Game {
         return -1;
     }
 
-    public int getColor(int circle) {
-        return this.getColor(circle/boardSize, circle%boardSize);
+    public int getPiece(int circle) {
+        return this.getPiece(circle/boardSize, circle%boardSize);
     }
 
     public String getGameMessage() {
         return gameMessage;
     }
+
 }
